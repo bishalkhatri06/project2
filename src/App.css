@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+}
+
+
+.carousel-item img{
+  height: 550px;
+}
+
+.card img{
+  height: 150px;
+}
