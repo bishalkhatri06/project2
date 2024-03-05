@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { IMG_URL } from "../config";
 
 const Cart = () => {
   const [product, setProduct] = useState([]);
@@ -26,7 +27,7 @@ const removeCartItem=id=>{
 // increase qty
 const increaseQty=id=>{
     const updateProduct= product.map(item=>{
-        if(item.id===id){
+        if(item.id===id && item.quantity<item.stock){
             return{...item,quantity:item.quantity+1}
         }
         else{
@@ -37,6 +38,22 @@ const increaseQty=id=>{
     setProduct(updateProduct)
 
     localStorage.setItem('cartItems',JSON.stringify(updateProduct))
+}
+
+// decrease qty
+const decreaseQty=id=>{
+  const updateProduct= product.map(item=>{
+      if(item.id===id && item.quantity>1){
+          return{...item,quantity:item.quantity-1}
+      }
+      else{
+          return item
+      }
+  })
+
+  setProduct(updateProduct)
+
+  localStorage.setItem('cartItems',JSON.stringify(updateProduct))
 }
   return (
     <>
@@ -54,15 +71,15 @@ const increaseQty=id=>{
                         <hr />
                         <div className="row d-flex align-items-center">
                       <div className="col-2">
-                        <img src={item.image} alt="" width={"100"} />
+                        <img src={`${IMG_URL}/${item.image}`} alt="" width={"100"} />
                       </div>
                       <div className="col-3">
                         <span><strong>{item.title}</strong></span>
                       </div>
-                      <div className="col-2 text-secondary">${item.price}</div>
+                      <div className="col-2 text-secondary">Rs.{item.price}</div>
                       <div className="col-3">
                         <div className="d-flex">
-                            <button className="btn btn-danger">-</button>
+                            <button className="btn btn-danger" onClick={()=>decreaseQty(item.id)}>-</button>
                             &nbsp;
                             <input type="number" className="form-control text-center border-0" value={item.quantity} readonly/>
                             &nbsp;
@@ -87,7 +104,7 @@ const increaseQty=id=>{
                 }
                 </span>
                 <br />
-                <span><strong>Price: </strong>
+                <span><strong>Price: </strong>Rs.
                 {
                     product.reduce((total,item)=>total+(item.quantity*item.price),0)
                 }

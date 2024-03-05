@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import Card from '../components/Card'
 import axios from 'axios'
 import { ColorRing } from 'react-loader-spinner'
+import { API } from '../config'
 
 const Products = () => {
     const[products,setProducts]=useState([])
@@ -11,7 +12,7 @@ const Products = () => {
     useEffect(()=>{
         const fetchProduct=async()=>{
             try{
-                const response=await axios.get(`https://fakestoreapi.com/products`)
+                const response=await axios.get(`${API}/allproduct`)
                 console.log(response.data)
                 setProducts(response.data)
                 setLoading(false)
